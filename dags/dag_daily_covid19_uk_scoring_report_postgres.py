@@ -129,13 +129,17 @@ with DAG('dag_daily_covid19_uk_scoring_report_postgres', default_args=default_ar
         date_today = dt.datetime.today().strftime('%Y-%m-%d')
         df_UK = pd.read_csv(f"/opt/airflow/data/uk_covid19_{date_today}.csv")
 
+        # For scoring plot to include dates properly in the x-axis
+        df_UK_reindexed_by_day = df_UK.copy()
+        df_UK_reindexed_by_day.index = df_UK.Day
+
         selected_columns=['Confirmed', 'Deaths', 'Recovered', 'Active', 'Incident_Rate', 'Case_Fatality_Ratio']
-        df_UK_selected = df_UK[selected_columns]
+        df_UK_selected = df_UK_reindexed_by_day[selected_columns]
 
         min_max_scaler = MinMaxScaler()
         df_UK_selected_minmax_scaled = pd.DataFrame(min_max_scaler.fit_transform(df_UK_selected[selected_columns]), columns=selected_columns)
         df_UK_selected_minmax_scaled.index = df_UK_selected.index
-        df_UK_selected_minmax_scaled['Day'] = df_UK.Day
+        df_UK_selected_minmax_scaled['Day'] = df_UK_reindexed_by_day.Day
         
         df_UK_selected_minmax_scaled[selected_columns].plot(figsize=(20, 10))
         plt.savefig(f"/opt/airflow/data/uk_scoring_report_{date_today}.png")
