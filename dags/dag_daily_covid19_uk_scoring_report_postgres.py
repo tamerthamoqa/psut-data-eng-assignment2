@@ -1,10 +1,6 @@
 import datetime as dt
-import pandas as pd
 import subprocess
-import matplotlib.pyplot as plt
 from datetime import timedelta
-from sklearn.preprocessing import MinMaxScaler
-from sqlalchemy import create_engine
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 
