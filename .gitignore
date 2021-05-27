@@ -3,3 +3,4 @@ plugins/*
 postgres/*
 pgvol/*
 db/*
+dags/__pycache__/*
