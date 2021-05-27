@@ -79,6 +79,9 @@
         test: ["CMD", "pg_isready", "-U", "airflow"]
         interval: 5s
         retries: 5
+      # Added
+      networks:
+        - localnet
       restart: always
 
     postgres:
@@ -106,6 +109,9 @@
         interval: 5s
         timeout: 30s
         retries: 50
+      # Added
+      networks:
+        - localnet
       restart: always
   
     airflow-webserver:
@@ -118,16 +124,25 @@
         interval: 10s
         timeout: 10s
         retries: 5
+      # Added
+      networks:
+        - localnet
       restart: always
   
     airflow-scheduler:
       <<: *airflow-common
       command: scheduler
+      # Added
+      networks:
+        - localnet
       restart: always
   
     airflow-worker:
       <<: *airflow-common
       command: celery worker
+      # Added
+      networks:
+        - localnet
       restart: always
   
     airflow-init:
@@ -150,6 +165,9 @@
         interval: 10s
         timeout: 10s
         retries: 5
+      # Added
+      networks:
+        - localnet
       restart: always
 
     datascience-notebook:
