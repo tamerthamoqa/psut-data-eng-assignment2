@@ -39,10 +39,10 @@ with DAG('dag_daily_covid19_uk_scoring_report_postgres', default_args=default_ar
             import matplotlib.pyplot as plt
 
         try:
-            import sklearn 
+            from sklearn.preprocessing import MinMaxScaler
         except:
             subprocess.check_call(['pip' ,'install', 'sklearn' ])
-            import sklearn
+            from sklearn.preprocessing import MinMaxScaler
         
 
     def _get_list_of_days():
@@ -64,6 +64,9 @@ with DAG('dag_daily_covid19_uk_scoring_report_postgres', default_args=default_ar
 
 
     def _get_df_i(day):
+        # I had to reimport the packages
+        import pandas as pd
+
         df_i = None
         try: 
             url_day = f'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{day}.csv'
@@ -97,6 +100,9 @@ with DAG('dag_daily_covid19_uk_scoring_report_postgres', default_args=default_ar
 
 
     def _get_uk_covid19_daily_reports():
+        # I had to reimport the packages
+        import pandas as pd
+
         df_all = []
 
         list_of_days = _get_list_of_days()
@@ -115,6 +121,11 @@ with DAG('dag_daily_covid19_uk_scoring_report_postgres', default_args=default_ar
 
     
     def _plot_and_save_uk_covid19_scoring_report_to_csv():
+        # I had to reimport the packages
+        import pandas as pd
+        from sklearn.preprocessing import MinMaxScaler
+        import matplotlib.pyplot as plt
+
         date_today = dt.datetime.today().strftime('%Y-%m-%d')
         df_UK = pd.read_csv(f"/opt/airflow/data/uk_covid19_{date_today}.csv")
 
@@ -133,6 +144,10 @@ with DAG('dag_daily_covid19_uk_scoring_report_postgres', default_args=default_ar
 
 
     def _insert_uk_covid19_scoring_report_to_postgres_table():
+        # I had to reimport the packages
+        import pandas as pd
+        from sqlalchemy import create_engine
+
         date_today = dt.datetime.today().strftime('%Y-%m-%d')
         df_UK = pd.read_csv(f"/opt/airflow/data/uk_covid19_{date_today}.csv")
 
